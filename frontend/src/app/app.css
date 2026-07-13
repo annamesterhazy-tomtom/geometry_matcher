@@ -6,13 +6,26 @@
   color: #1b1b1f;
 }
 
+header {
+  background: #1b4332;
+  color: #f4f6f4;
+  padding: 1.25rem 1.75rem;
+  margin-bottom: 0.5rem;
+  clip-path: polygon(
+    16px 0, calc(100% - 16px) 0, 100% 16px,
+    100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%,
+    0 calc(100% - 16px), 0 16px
+  );
+}
+
 header h1 {
   margin-bottom: 0.25rem;
+  color: #f4f6f4;
 }
 
 .subtitle {
   margin-top: 0;
-  color: #5b5b63;
+  color: #cfe3d6;
 }
 
 .pickers {
