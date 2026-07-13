@@ -257,6 +257,14 @@ paths correctly.
 - Packaging as a standalone executable (e.g. PyInstaller) was never
   requested — currently run from source via the venv.
 
+## Latest UI styling
+
+The header (`frontend/src/app/app.html` `<header>` / `app.css`) is styled
+as a dark-green banner (`#1b4332` background, light text) with beveled
+(chamfered, not rounded) corners via a CSS `clip-path` polygon cutting
+16px off each corner. Session paused here — no other design changes
+requested yet.
+
 ## How to run the app
 
 ```powershell
