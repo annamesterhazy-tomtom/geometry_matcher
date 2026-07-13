@@ -224,23 +224,58 @@ A single output `.gpkg` with two layers:
 
 ## Status / what's built vs. not yet
 
-**Done:**
+**Done — full pipeline working end-to-end, including the real UI:**
 - Python venv + dependencies
-- Angular scaffold (not yet wired up)
+- Angular UI (`frontend/src/app/`): source/target/output file pickers, Run
+  button, results summary table — wired to `window.pywebview.api`
 - Matching engine, point-coverage check, output writer — all tested
-- Python API bridge (`app/api.py`) — tested directly, not yet from the UI
-- Git repo pushed to GitHub
+- Python API bridge (`app/api.py`) — tested directly and via the real UI
+- `app/tray.py` (pystray tray icon, drawn programmatically, Open/Quit menu)
+  and `app/main.py` (entry point: hidden pywebview window + tray wiring)
+- End-to-end validation: launched the actual packaged window, confirmed the
+  Angular UI renders correctly (title + 4 buttons), and drove
+  `window.pywebview.api.run_matching(...)` from inside the running UI
+  against the real sample data — result matched the integration test
+  exactly (39/44 source lines matched, 261 output rows, 1/42 signpost
+  points flagged orphan).
+- Git repo pushed to GitHub throughout
 
-**Not yet built:**
-- Angular UI itself (file picker buttons, Run button, results table) in
-  `frontend/src/app/app.ts/.html/.css`
-- `app/tray.py` (pystray tray icon/menu) and `app/main.py` (entry point
-  wiring the tray + pywebview window + built Angular assets together)
-- End-to-end run of the *packaged app* (not just the API) against real data
+**Known gotcha found & fixed during e2e testing:** loading the built
+Angular `index.html` via a raw `file://` URI produces a blank page, because
+Angular's `<base href="/">`-relative asset requests resolve against the
+filesystem root and fail. Fix: pass the plain filesystem path (not a
+`file://` URI) to `webview.create_window(url=...)` — pywebview then serves
+it through its internal local HTTP server, which handles relative asset
+paths correctly.
+
+**Not done (deferred, not blocking):**
 - Investigation of the 5 unmatched source lines / 1 orphan point (deferred
-  by the user until the tool itself is usable)
+  by the user until the tool itself is usable — it now is, via
+  `python -m app.main` after `ng build`).
+- No `.gdb`→`.gpkg` conversion script (explicitly out of scope — user
+  supplies `.gpkg` files directly).
+- Packaging as a standalone executable (e.g. PyInstaller) was never
+  requested — currently run from source via the venv.
 
-## How to run things today (dev-only, no UI yet)
+## How to run the app
+
+```powershell
+# 1. Build the Angular UI once (rebuild after any frontend change):
+cd frontend
+npx ng build
+cd ..
+
+# 2. Launch the app (creates a hidden window + tray icon; tray "Open" shows it,
+#    it's also shown automatically on first launch):
+.\.venv\Scripts\python.exe -m app.main
+```
+
+In the UI: pick the source `.gpkg` (containing the curated lines + signpost
+points layers), the target network `.gpkg`, and an output `.gpkg` location,
+then click "Run matching". The results panel shows match/orphan counts and
+the output file path once done.
+
+## How to run tests (dev-only)
 
 ```powershell
 # From C:\00PROJECTS\GeometryMatcher

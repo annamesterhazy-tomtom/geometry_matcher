@@ -192,14 +192,21 @@ you in the loop to supervise and learn from the process.
 
 ## Next steps
 
-1. Build the Angular UI (`frontend/src/app/app.ts` + `.html` + `.css`):
-   buttons for source/target/output pickers calling `window.pywebview.api`,
-   a Run button, and a results panel showing the `RunSummary` fields.
-2. Build `app/tray.py` (pystray icon, Open/Quit menu) and `app/main.py`
-   (entry point wiring pywebview window + tray together, loading the built
-   Angular `dist/` output).
-3. `ng build` the frontend and do a full end-to-end run of the packaged app
-   against the real sample data via the actual UI (not just the API
-   directly).
-4. Revisit the 5 unmatched source lines / 1 orphan point via the running
-   tool, per your preference to look at those later using the tool itself.
+All planned v1 todos are complete:
+
+1. ✅ Angular UI built and wired to `window.pywebview.api`.
+2. ✅ `app/tray.py` + `app/main.py` built (pystray tray icon, hidden
+   pywebview window shown on open).
+3. ✅ End-to-end validation done through the real packaged window (not just
+   the API directly) — results match the integration test exactly.
+4. Deferred by user choice: investigating the 5 unmatched source lines / 1
+   orphan point — now possible any time via `python -m app.main`.
+
+Known gotcha fixed during e2e testing: `webview.create_window(url=...)`
+must be given the plain filesystem path to `index.html`, not a `file://`
+URI — the latter breaks Angular's `base href`-relative asset loading
+(blank page). Passing the plain path lets pywebview serve it through its
+internal HTTP server instead.
+
+Repo: https://github.com/annamesterhazy-tomtom/geometry_matcher (main).
+`PROJECT.md` in the repo has the fully up to date status/how-to-run info.
