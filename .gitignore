@@ -1,0 +1,22 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Angular / Node
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+npm-debug.log*
+
+# Sample geodata (kept local only, not committed)
+SAMPLE_DATA/
+*.gdb/
+MaxDim_sample.gdb/
+MN_R_HUN_NetworkElements_sample.gdb/
+
+# OS / editor
+.vscode/
+Thumbs.db
+.DS_Store
